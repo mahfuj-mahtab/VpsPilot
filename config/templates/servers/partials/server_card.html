@@ -1,0 +1,135 @@
+<article class="server-card rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden" data-server-id="{{ server.pk }}">
+  <!-- Card header -->
+  <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg {% if metrics.status == 'online' %}bg-emerald-100 text-emerald-600{% else %}bg-red-100 text-red-600{% endif %}">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="font-semibold text-slate-900">{{ server.name }}</h2>
+        <p class="text-xs text-slate-500">
+          {% if server.is_local %}Local instance{% else %}{{ server.base_url }}{% endif %}
+        </p>
+      </div>
+    </div>
+    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium
+      {% if metrics.status == 'online' %}bg-emerald-50 text-emerald-700{% else %}bg-red-50 text-red-700{% endif %}">
+      <span class="h-1.5 w-1.5 rounded-full {% if metrics.status == 'online' %}bg-emerald-500{% else %}bg-red-500{% endif %}"></span>
+      {% if metrics.status == 'online' %}Online{% else %}Offline{% endif %}
+    </span>
+  </div>
+
+  {% if metrics.status == 'error' %}
+  <div class="p-6">
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {{ metrics.error }}
+    </div>
+  </div>
+  {% else %}
+  <div class="p-6">
+    <!-- Host info -->
+    <div class="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div class="rounded-lg bg-slate-50 px-4 py-3">
+        <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Hostname</p>
+        <p class="mt-1 truncate text-sm font-semibold text-slate-800">{{ metrics.hostname }}</p>
+      </div>
+      <div class="rounded-lg bg-slate-50 px-4 py-3">
+        <p class="text-xs font-medium uppercase tracking-wide text-slate-400">CPU Cores</p>
+        <p class="mt-1 text-sm font-semibold text-slate-800">{{ metrics.cpu_count|default:"—" }}</p>
+      </div>
+      <div class="rounded-lg bg-slate-50 px-4 py-3">
+        <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Load Avg</p>
+        <p class="mt-1 text-sm font-semibold text-slate-800">
+          {{ metrics.load_avg.0 }} / {{ metrics.load_avg.1 }} / {{ metrics.load_avg.2 }}
+        </p>
+      </div>
+      <div class="rounded-lg bg-slate-50 px-4 py-3">
+        <p class="text-xs font-medium uppercase tracking-wide text-slate-400">Uptime</p>
+        <p class="mt-1 text-sm font-semibold text-slate-800 uptime-display" data-seconds="{{ metrics.uptime_seconds }}">
+          —
+        </p>
+      </div>
+    </div>
+
+    <!-- Gauge charts -->
+    <div class="grid grid-cols-3 gap-4">
+      <div class="flex flex-col items-center rounded-xl border border-slate-100 p-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">CPU</p>
+        <div class="relative h-28 w-28">
+          <canvas id="gauge-cpu-{{ server.pk }}" data-gauge data-percent="{{ metrics.cpu_percent }}" data-label="CPU"></canvas>
+        </div>
+        <p class="mt-2 text-sm font-medium text-slate-700">{{ metrics.cpu_percent }}% used</p>
+      </div>
+      <div class="flex flex-col items-center rounded-xl border border-slate-100 p-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Memory</p>
+        <div class="relative h-28 w-28">
+          <canvas id="gauge-mem-{{ server.pk }}" data-gauge data-percent="{{ metrics.memory.percent }}" data-label="RAM"></canvas>
+        </div>
+        <p class="mt-2 text-sm font-medium text-slate-700">
+          {{ metrics.memory.used_gb }} / {{ metrics.memory.total_gb }} GB
+        </p>
+      </div>
+      <div class="flex flex-col items-center rounded-xl border border-slate-100 p-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Disk</p>
+        <div class="relative h-28 w-28">
+          <canvas id="gauge-disk-{{ server.pk }}" data-gauge data-percent="{{ metrics.disk.percent }}" data-label="Disk"></canvas>
+        </div>
+        <p class="mt-2 text-sm font-medium text-slate-700">
+          {{ metrics.disk.used_gb }} / {{ metrics.disk.total_gb }} GB
+        </p>
+      </div>
+    </div>
+
+    <!-- Usage bars -->
+    <div class="mt-6 space-y-4">
+      <div>
+        <div class="mb-1 flex justify-between text-xs font-medium text-slate-600">
+          <span>CPU Usage</span>
+          <span>{{ metrics.cpu_percent }}%</span>
+        </div>
+        <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div class="h-full rounded-full transition-all {% if metrics.cpu_percent >= 85 %}bg-red-500{% elif metrics.cpu_percent >= 65 %}bg-amber-500{% else %}bg-sky-500{% endif %}"
+               style="width: {{ metrics.cpu_percent }}%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="mb-1 flex justify-between text-xs font-medium text-slate-600">
+          <span>Memory Usage</span>
+          <span>{{ metrics.memory.percent }}%</span>
+        </div>
+        <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div class="h-full rounded-full transition-all {% if metrics.memory.percent >= 85 %}bg-red-500{% elif metrics.memory.percent >= 65 %}bg-amber-500{% else %}bg-sky-500{% endif %}"
+               style="width: {{ metrics.memory.percent }}%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="mb-1 flex justify-between text-xs font-medium text-slate-600">
+          <span>Disk Usage</span>
+          <span>{{ metrics.disk.percent }}%</span>
+        </div>
+        <div class="h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div class="h-full rounded-full transition-all {% if metrics.disk.percent >= 85 %}bg-red-500{% elif metrics.disk.percent >= 65 %}bg-amber-500{% else %}bg-sky-500{% endif %}"
+               style="width: {{ metrics.disk.percent }}%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</article>
+
+<script>
+document.querySelectorAll('.uptime-display').forEach(function (el) {
+  const seconds = parseInt(el.dataset.seconds, 10);
+  if (!seconds) return;
+  const d = Math.floor(seconds / 86400);
+  const h = Math.floor((seconds % 86400) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const parts = [];
+  if (d) parts.push(d + 'd');
+  if (h) parts.push(h + 'h');
+  parts.push(m + 'm');
+  el.textContent = parts.join(' ');
+});
+</script>

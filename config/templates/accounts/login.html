@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in — VPS Pilot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+  </style>
+</head>
+<body class="h-full">
+  <div class="flex min-h-screen">
+    <!-- Left panel -->
+    <div class="hidden w-1/2 bg-gradient-to-br from-slate-900 via-slate-800 to-sky-900 lg:flex lg:flex-col lg:justify-between lg:p-12">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500 shadow-lg shadow-sky-500/40">
+          <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold text-white">VPS Pilot</span>
+      </div>
+      <div>
+        <h2 class="text-4xl font-bold leading-tight text-white">Monitor every VPS<br>from one place.</h2>
+        <p class="mt-4 max-w-md text-lg text-slate-300">Track CPU, memory, and disk usage across all your servers with a clean, real-time dashboard.</p>
+      </div>
+      <p class="text-sm text-slate-500">&copy; VPS Pilot</p>
+    </div>
+
+    <!-- Right panel — login form -->
+    <div class="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-16">
+      <div class="mx-auto w-full max-w-md">
+        <div class="mb-8 lg:hidden">
+          <div class="flex items-center gap-2">
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500">
+              <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+              </svg>
+            </div>
+            <span class="text-lg font-bold text-slate-900">VPS Pilot</span>
+          </div>
+        </div>
+
+        <h1 class="text-2xl font-bold text-slate-900">Welcome back</h1>
+        <p class="mt-2 text-sm text-slate-500">Sign in with your superadmin account to continue.</p>
+
+        {% if error %}
+        <div class="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" class="mt-8 space-y-5">
+          {% csrf_token %}
+          <div>
+            <label for="username" class="block text-sm font-medium text-slate-700">Username</label>
+            <input type="text" name="username" id="username" required autofocus
+                   class="mt-1.5 block w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                   placeholder="admin">
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+            <input type="password" name="password" id="password" required
+                   class="mt-1.5 block w-full rounded-lg border border-slate-300 px-4 py-2.5 text-slate-900 shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                   placeholder="••••••••">
+          </div>
+          <button type="submit"
+                  class="w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-sky-600/30 transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+            Sign in
+          </button>
+        </form>
+
+        <p class="mt-8 text-center text-xs text-slate-400">
+          Only superadmin accounts are permitted.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

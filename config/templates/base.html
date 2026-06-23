@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}VPS Pilot{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef9ff',
+              100: '#d9f1ff',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            },
+            sidebar: {
+              DEFAULT: '#0f172a',
+              hover: '#1e293b',
+              active: '#1d4ed8',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-slate-50 font-sans antialiased">
+  <div class="flex h-full min-h-screen">
+    <!-- Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-sidebar text-white shadow-xl">
+      <div class="flex h-16 items-center gap-3 border-b border-slate-700/50 px-6">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 shadow-lg shadow-brand-500/30">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm font-semibold tracking-wide">VPS Pilot</p>
+          <p class="text-xs text-slate-400">Infrastructure Monitor</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 space-y-1 px-3 py-6">
+        <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Menu</p>
+        <a href="{% url 'dashboard' %}"
+           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition {% if request.resolver_match.url_name == 'dashboard' %}bg-sidebar-active text-white shadow-md{% else %}text-slate-300 hover:bg-sidebar-hover hover:text-white{% endif %}">
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="{% url 'server_info' %}"
+           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition {% if request.resolver_match.url_name == 'server_info' %}bg-sidebar-active text-white shadow-md{% else %}text-slate-300 hover:bg-sidebar-hover hover:text-white{% endif %}">
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          Server Info
+        </a>
+        <!-- <a href="{% url 'admin:servers_vpsserver_changelist' %}"
+           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-sidebar-hover hover:text-white">
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          Manage VPS
+        </a> -->
+      </nav>
+
+      <div class="border-t border-slate-700/50 p-4">
+        <div class="mb-3 flex items-center gap-3 rounded-lg bg-slate-800/50 px-3 py-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-xs font-bold">
+            {{ request.user.username|slice:":2"|upper }}
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium">{{ request.user.username }}</p>
+            <p class="text-xs text-slate-400">Superadmin</p>
+          </div>
+        </div>
+        <a href="{% url 'logout' %}"
+           class="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-600 px-3 py-2 text-sm text-slate-300 transition hover:border-slate-500 hover:bg-slate-800 hover:text-white">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Sign out
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex flex-1 flex-col pl-64">
+      <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur-md">
+        <div class="flex h-16 items-center justify-between px-8">
+          <div>
+            <h1 class="text-lg font-semibold text-slate-900">{% block page_title %}Dashboard{% endblock %}</h1>
+            <p class="text-sm text-slate-500">{% block page_subtitle %}{% endblock %}</p>
+          </div>
+          {% block header_actions %}{% endblock %}
+        </div>
+      </header>
+
+      <main class="flex-1 p-8">
+        {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for message in messages %}
+          <div class="rounded-lg border px-4 py-3 text-sm {% if message.tags == 'error' %}border-red-200 bg-red-50 text-red-800{% else %}border-brand-200 bg-brand-50 text-brand-800{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

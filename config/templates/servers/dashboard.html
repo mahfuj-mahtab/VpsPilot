@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — VPS Pilot{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Overview of your infrastructure{% endblock %}
+
+{% block content %}
+<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-slate-900">Server Info</h3>
+        <p class="text-sm text-slate-500">Live CPU, RAM &amp; disk metrics</p>
+      </div>
+    </div>
+    <a href="{% url 'server_info' %}"
+       class="mt-5 inline-flex items-center gap-1 text-sm font-medium text-sky-600 hover:text-sky-700">
+      View metrics
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-slate-900">Manage VPS</h3>
+        <p class="text-sm text-slate-500">Add remote servers to monitor</p>
+      </div>
+    </div>
+    <a href="{% url 'admin:servers_vpsserver_add' %}"
+       class="mt-5 inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700">
+      Add VPS
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white shadow-sm md:col-span-2 xl:col-span-1">
+    <h3 class="font-semibold">Quick start</h3>
+    <ol class="mt-4 space-y-3 text-sm text-slate-300">
+      <li class="flex gap-3">
+        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-bold">1</span>
+        <span>Install VPS Pilot on each server you want to monitor.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-bold">2</span>
+        <span>Copy the <code class="rounded bg-slate-700 px-1">METRICS_API_TOKEN</code> from each server's <code class="rounded bg-slate-700 px-1">.env</code>.</span>
+      </li>
+      <li class="flex gap-3">
+        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-bold">3</span>
+        <span>Add remote VPS entries in the admin panel with base URL and token.</span>
+      </li>
+    </ol>
+  </div>
+</div>
+{% endblock %}

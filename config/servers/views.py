@@ -8,20 +8,20 @@ from django.views.decorators.http import require_GET
 
 from .services import fetch_all_metrics, fetch_server_metrics
 from .models import VPSServer
+from config.utils.custom_decorator import staff_or_superuser_required
 
-
-def superuser_required(view):
-    return user_passes_test(lambda u: u.is_superuser, login_url="login")(view)
+# def superuser_required(view):
+#     return user_passes_test(lambda u: u.is_superuser, login_url="login")(view)
 
 
 @login_required
-@superuser_required
+@staff_or_superuser_required
 def dashboard(request):
     return render(request, "servers/dashboard.html")
 
 
 @login_required
-@superuser_required
+@staff_or_superuser_required
 def server_info(request):
     metrics_data = fetch_all_metrics()
     context = {
@@ -42,7 +42,7 @@ def server_info(request):
 
 
 @login_required
-@superuser_required
+@staff_or_superuser_required
 @require_GET
 def server_metrics_partial(request, pk):
     """HTMX-friendly partial refresh for a single server card."""

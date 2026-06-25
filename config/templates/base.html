@@ -76,6 +76,15 @@
           </svg>
           Manage VPS
         </a> -->
+
+        <p class="mb-3 mt-6 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Database</p>
+        <a href="{% url 'db_dashboard' %}"
+           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition {% if request.resolver_match.url_name == 'db_dashboard' %}bg-sidebar-active text-white shadow-md{% else %}text-slate-300 hover:bg-sidebar-hover hover:text-white{% endif %}">
+          <svg class="h-5 w-5 shrink-0 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+          </svg>
+          PostgreSQL Dashboard
+        </a>
       </nav>
 
       <div class="border-t border-slate-700/50 p-4">
